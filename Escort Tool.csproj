@@ -8,10 +8,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <ApplicationIcon>Images\COM TOOL.ico</ApplicationIcon>
+    <ApplicationIcon>Images\Escort Tool.ico</ApplicationIcon>
     <PlatformTarget>x64</PlatformTarget>
     <SignAssembly>False</SignAssembly>
     <NeutralLanguage>en</NeutralLanguage>
+    <StartupObject>Escort_Tool.App</StartupObject>
+    <Title>Escort Tool</Title>
+    <Authors>Kamikadzexa</Authors>
+    <Company>Escort</Company>
+    <PackageIcon>Escort Tool.ico</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -31,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Images\COM TOOL.ico" />
+    <Content Include="Images\Escort Tool.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,6 +60,13 @@
 
   <ItemGroup>
     <PackageReference Include="System.IO.Ports" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Images\Escort Tool.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -91,6 +91,14 @@
                           VerticalAlignment="Center" 
                           Style="{StaticResource ComboBoxFlatStyle}"
                           Margin="5"/>
+                <TextBlock Grid.Column="7"
+                           Text="1.0.0"
+                           FontFamily="/Fonts/#Oxanium"
+                           Foreground="#DFDFDF"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"
+                           FontSize="16"
+                           Margin="10"/>
 
 
 
