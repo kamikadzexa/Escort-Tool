@@ -3,23 +3,15 @@ using System.Windows;
 using System.Windows.Input;
 using System.IO.Ports;
 using System.Windows.Threading;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using MessageBox = System.Windows.MessageBox;
 using Escort_Tool.MVVM.View;
 using Application = System.Windows.Application;
 using Escort_Tool.MVVM.ViewModel;
-using System.Windows.Controls;
 using System.IO;
 using System.Media;
 using System.Reflection;
-using System.Windows.Media;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Windows.Markup;
 using UserControl = System.Windows.Controls.UserControl;
-using System.Text;
-using Escort_Tool.Core;
 
 namespace Escort_Tool
 {
@@ -214,14 +206,23 @@ namespace Escort_Tool
 
         private void UpdateMaxHeight()
         {
-            // Get the handle of the window
             var handle = new WindowInteropHelper(this).Handle;
-
             // Get the screen where the window is currently located
-            Screen currentScreen = Screen.FromHandle(handle);
+            Screen currentScreen = System.Windows.Forms.Screen.FromHandle(handle);
 
-            // Set the MaxHeight of the window to the working area height (excluding the taskbar)
-            this.MaxHeight = currentScreen.WorkingArea.Height + 8;
+            // Get the DPI scaling factor for the current screen
+            var source = PresentationSource.FromVisual(this);
+            double dpiY = 96.0; // Default DPI
+            if (source != null)
+            {
+                dpiY = 96.0 * source.CompositionTarget.TransformToDevice.M22;
+            }
+
+            // Adjust the work area height for DPI scaling
+            double adjustedHeight = currentScreen.WorkingArea.Height * (96.0 / dpiY);
+
+            this.MaxHeight = adjustedHeight + 8;
+
         }
 
 
