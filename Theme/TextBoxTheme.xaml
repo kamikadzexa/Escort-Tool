@@ -33,7 +33,7 @@
         <Setter Property="Foreground" Value="#DFDFDF" />
         <Setter Property="CaretBrush" Value="#DFDFDF" />
         <Setter Property="FontSize" Value="16" />
-        <Setter Property="FontFamily" Value="/Fonts/#Oxanium" />
+        <Setter Property="FontFamily" Value="/Fonts/#Roboto" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
@@ -47,7 +47,7 @@
                                        VerticalAlignment="Top"
                                        HorizontalAlignment="Left"
                                        Margin="15"
-                                       FontFamily="/Fonts/#Oxanium"
+                                       FontFamily="/Fonts/#Roboto"
                                        FontSize="16"
                                        Foreground="#DFDFDF">
                                 <TextBlock.Style>

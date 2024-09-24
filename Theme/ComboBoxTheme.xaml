@@ -51,7 +51,7 @@
     <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
     <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
     <Setter Property="TextElement.Foreground" Value="#DFDFDF"/>
-    <Setter Property="FontFamily" Value="/Fonts/#Oxanium"/>
+    <Setter Property="FontFamily" Value="/Fonts/#Roboto"/>
     <Setter Property="FontSize" Value="24"/>
     <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
     <Setter Property="Control.Template">

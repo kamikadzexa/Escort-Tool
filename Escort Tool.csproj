@@ -30,8 +30,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Fonts\Oxanium-VariableFont_wght.ttf" />
+    <None Remove="Fonts\Roboto.ttf" />
+    <None Remove="Images\English.png" />
     <None Remove="Images\ESCORT.png" />
+    <None Remove="Images\Russian.png" />
     <None Remove="Sounds\Error.wav" />
   </ItemGroup>
 
@@ -50,10 +52,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Fonts\Oxanium-VariableFont_wght.ttf">
+    <Resource Include="Fonts\Roboto.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\English.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\ESCORT.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Russian.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

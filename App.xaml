@@ -14,6 +14,8 @@
                 <ResourceDictionary Source="Theme/ButtonTheme.xaml"/>
                 <ResourceDictionary Source="Theme/SmallButtonTheme.xaml"/>
                 <ResourceDictionary Source="Theme/CheckBoxTheme.xaml"/>
+                <ResourceDictionary Source="Languages/English.xaml"/>
+                <ResourceDictionary Source="Languages/Russian.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewModel:HomeViewModel}">

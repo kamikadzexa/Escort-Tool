@@ -22,7 +22,7 @@
 
         <Setter Property="Background" Value="#444152"/>
         <Setter Property="Foreground" Value="#DFDFDF"/>
-        <Setter Property="FontFamily" Value="/Fonts/#Oxanium"/>
+        <Setter Property="FontFamily" Value="/Fonts/#Roboto"/>
         <Setter Property="FontSize" Value="24"/>
 
         <Style.Triggers>

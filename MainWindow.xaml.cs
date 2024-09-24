@@ -12,6 +12,10 @@ using System.IO;
 using System.Media;
 using System.Reflection;
 using UserControl = System.Windows.Controls.UserControl;
+using System.Windows.Controls;
+using System.Globalization;
+using System.Resources;
+using System.Windows.Media.Imaging;
 
 namespace Escort_Tool
 {
@@ -40,9 +44,46 @@ namespace Escort_Tool
             clearTextTimer = new DispatcherTimer();
             clearTextTimer.Interval = TimeSpan.FromSeconds(5);
             clearTextTimer.Tick += ClearTextTimer_Tick;
-
-
         }
+
+
+
+        private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            if (LanguageComboBox.SelectedIndex is 0)
+            {
+                    ChangeLanguage("en-US");
+                
+            }
+            if (LanguageComboBox.SelectedIndex is 1)
+            {
+                ChangeLanguage("ru-RU");
+            }
+        }
+        private void ChangeLanguage(string language)
+        {
+            ResourceDictionary dict = new ResourceDictionary();
+
+            switch (language)
+            {
+                case "en-US":
+                    dict.Source = new Uri("Languages/English.xaml", UriKind.Relative);
+                    break;
+                case "ru-RU":
+                    dict.Source = new Uri("Languages/Russian.xaml", UriKind.Relative);
+                    break;
+            }
+
+            // Remove existing language dictionaries and apply the new one
+            var mergedDicts = Application.Current.Resources.MergedDictionaries;
+            if (mergedDicts.Count > 0)
+            {
+                mergedDicts.RemoveAt(0); // Remove the current language
+            }
+            mergedDicts.Add(dict); // Add the new language
+        }
+
 
         private async void OnDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
@@ -71,6 +112,14 @@ namespace Escort_Tool
 
             StopBitsComboBox.ItemsSource = Enum.GetValues(typeof(StopBits));
             StopBitsComboBox.SelectedItem = StopBits.One; // Default to One
+
+            var image1 = new BitmapImage(new Uri("pack://application:,,,/Images/English.png"));
+            var image2 = new BitmapImage(new Uri("pack://application:,,,/Images/Russian.png"));
+
+            // Set the ComboBox items
+            LanguageComboBox.ItemsSource = new[] { image1, image2 };
+            LanguageComboBox.SelectedIndex = 0;
+            
 
         }
 
@@ -136,7 +185,7 @@ namespace Escort_Tool
         {
             if (_serialPort == null || !_serialPort.IsOpen)
             {
-                SetErrorText("COM port is not open");
+                SetErrorText((string)FindResource("COM port is not open"));
                 return;
             }
 
@@ -164,7 +213,7 @@ namespace Escort_Tool
             }
             catch (Exception ex)
             {
-                SetErrorText("Wrong symbols or length");
+                SetErrorText((string)FindResource("Wrong symbols or length"));
             }
         }
 
@@ -251,6 +300,7 @@ namespace Escort_Tool
 
         private void PortCheckTimer_Tick(object sender, EventArgs e)
         {
+
             string[] availablePorts = SerialPort.GetPortNames();
 
             // Update the PortComboBox if the list of ports has changed
@@ -274,10 +324,10 @@ namespace Escort_Tool
                 // Port has been disconnected
                 Dispatcher.Invoke(() =>
                 {
-                    SetErrorText($"{_lastSelectedPort} disconnected.");
+                SetErrorText($"{_lastSelectedPort}" + " " + (string)FindResource("disconnected")); 
                     _serialPort.Close();
                     _lastSelectedPort = null;
-                    TogglePortButton.Content = "Open Port"; // Update button content
+                    TogglePortButton.Content = (string)FindResource("Open Port"); // Update button content
                     _isPortOpen = false;
                     PortComboBox.IsEnabled = true; // Re-enable the ComboBox
                 });
@@ -320,7 +370,7 @@ namespace Escort_Tool
 
             if (string.IsNullOrEmpty(selectedPort))
             {
-                SetErrorText("Please select a COM port");
+                SetErrorText((string)FindResource("Please select a COM port"));
                 return;
             }
 
@@ -329,7 +379,7 @@ namespace Escort_Tool
                 try
                 {
                     _serialPort.Close();
-                    TogglePortButton.Content = "Open Port"; // Update button content
+                    TogglePortButton.Content = (string)FindResource("Open Port"); 
                     _isPortOpen = false;
                     PortComboBox.IsEnabled = true; // Re-enable the ComboBox
                     BaudRateComboBox.IsEnabled = true;
@@ -339,7 +389,7 @@ namespace Escort_Tool
                 }
                 catch (Exception ex)
                 {
-                    SetErrorText($"Error closing port");
+                    SetErrorText("Error closing port");
                 }
             }
             else
@@ -360,7 +410,7 @@ namespace Escort_Tool
                 {
                     _serialPort.Open();
                     _serialPort.DataReceived += OnDataReceived;
-                    TogglePortButton.Content = "Close Port"; // Update button content
+                    TogglePortButton.Content = (string)FindResource("Close Port");
                     _isPortOpen = true;
                     PortComboBox.IsEnabled = false; // Disable the ComboBox
                     BaudRateComboBox.IsEnabled = false;
@@ -371,7 +421,7 @@ namespace Escort_Tool
                 }
                 catch (Exception ex)
                 {
-                    SetErrorText($"Cannot open Com port");
+                    SetErrorText((string)FindResource("Cannot open Com port"));
                 }
             }
         }

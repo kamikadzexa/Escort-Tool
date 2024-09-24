@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Escort_Tool.MVVM.View"
              mc:Ignorable="d" 
              xmlns:vm="clr-namespace:Escort_Tool.MVVM.ViewModel"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="900">
     
     
     <Grid>
@@ -20,15 +20,6 @@
             <RowDefinition/>
             <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="Command" KeyDown="Command_KeyDown"
-                         Grid.Row="2"
-                         Grid.Column="0"
-                         Height="50"
-                         VerticalAlignment="Bottom"
-                         HorizontalAlignment="Stretch"
-                         Margin="10,10,70,10"
-                         Tag="Enter command here"
-                         Style="{StaticResource ModernTextbox}"/>
         <TextBox x:Name="ReceivedDataTextBox"
                          Grid.Row="1"
                          Grid.Column="0"                         
@@ -36,21 +27,35 @@
                          HorizontalAlignment="Stretch"
                          Margin="10"
                          IsReadOnly="True"
-                         Tag="Output will be here"
+                         Tag="{DynamicResource Output will be here}"
                          Text="{Binding ReceivedData}"
                          Style="{StaticResource ModernTextbox}"
                          VerticalScrollBarVisibility="Auto"/>
-        
-        <Button x:Name="SendButton"
-                Grid.Row="2"
+        <Grid Grid.Row="2">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="Command" KeyDown="Command_KeyDown"
+                         Grid.Column="0"
+                         Height="50"
+                         VerticalAlignment="Bottom"
+                         HorizontalAlignment="Stretch"
+                         Margin="10,0,0,10"
+                         Tag="{DynamicResource Enter command here}"
+                         Style="{StaticResource ModernTextbox}"/>
+            <Button x:Name="SendButton"
+                    Grid.Column="1"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Right"
-                Width="65"
-                Margin="0,15,5,15"
-                Content="Send"  
+                Margin="10"
+                Content="{DynamicResource Send}"  
                 FontSize="16"
                 Style="{StaticResource SmallButtonTheme}"   
                 Click="SendButton_Click" />
+        </Grid>
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
@@ -62,13 +67,12 @@
             </Grid.ColumnDefinitions>
             
             <Button x:Name="ClearButton" 
-                        Content="Clear"  
+                        Content="{DynamicResource Clear}"  
                         VerticalAlignment="Center"  
                         HorizontalAlignment="Left"
                         Margin="10,0,10,0"
                         Grid.Column="0"
-                        Style="{StaticResource SmallButtonTheme}"  
-                        Width="70"
+                        Style="{StaticResource SmallButtonTheme}" 
                         FontSize="16"
                         Click="ClearButton_Click"/>
             <CheckBox x:Name="TimeCheckBox"
@@ -81,8 +85,8 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Right"
                        Margin="45,10,10,10"
-                       Text="Time"
-                       FontFamily="/Fonts/#Oxanium"
+                       Text="{DynamicResource Time}" 
+                       FontFamily="/Fonts/#Roboto"
                        Foreground="#DFDFDF"
                        FontSize="16"/>
             <CheckBox x:Name="CrcCheckBox"
@@ -95,8 +99,8 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Right"
                        Margin="45,10,10,10"
-                       Text="Send CRC"
-                       FontFamily="/Fonts/#Oxanium"
+                       Text="{DynamicResource Send CRC}" 
+                       FontFamily="/Fonts/#Roboto"
                        Foreground="#DFDFDF"
                        FontSize="16"/>
             <CheckBox x:Name="AutoScrollCheckBox"
@@ -109,8 +113,8 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Right"
                        Margin="45,10,10,10"
-                       Text="AutoScroll"
-                       FontFamily="/Fonts/#Oxanium"
+                       Text="{DynamicResource AutoScroll}" 
+                       FontFamily="/Fonts/#Roboto"
                        Foreground="#DFDFDF"
                        FontSize="16"/>
 
@@ -124,8 +128,8 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Right"
                        Margin="45,10,10,10"
-                       Text="Check CRC"
-                       FontFamily="/Fonts/#Oxanium"
+                       Text="{DynamicResource Check CRC}" 
+                       FontFamily="/Fonts/#Roboto"
                        Foreground="#DFDFDF"
                        FontSize="16"/>
 

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Escort Tool", "Escort Tool.csproj", "{8F5C56F7-4F13-4BB6-B074-4C5094625DE8}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Escort Tool installer", "..\Escort Tool installer\Escort Tool installer.vdproj", "{03A07069-60EC-4CDF-B1B2-09A448CAEA34}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Escort Tool msi", "..\Escort Tool installer\Escort Tool installer.vdproj", "{03A07069-60EC-4CDF-B1B2-09A448CAEA34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

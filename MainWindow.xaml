@@ -7,7 +7,7 @@
         xmlns:viewModel="clr-namespace:Escort_Tool.MVVM.ViewModel"
         xmlns:view="clr-namespace:Escort_Tool.MVVM.View"
         mc:Ignorable="d" 
-        Height="700" Width="1200"
+        Height="800" Width="1400"
         WindowStyle="None"
         ResizeMode="CanResize"
         Background="Transparent"
@@ -53,7 +53,8 @@
                           Style="{StaticResource ComboBoxFlatStyle}"
                           Margin="15,0,10,0"/>
                 <Button x:Name="TogglePortButton" 
-                        Content="Open Port"  
+                        Content="{DynamicResource Open Port}"
+                        
                         VerticalAlignment="Center"  
                         Grid.Column="1"
                         Style="{StaticResource ButtonTheme}"  
@@ -65,8 +66,8 @@
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left"
                     Margin="10,0,10,0"
-                    FontSize="24"
-                    FontFamily="/Fonts/#Oxanium"
+                    FontSize="22"
+                    FontFamily="/Fonts/#Roboto"
                     Foreground="Red"
                     FontWeight="Bold"
                     />
@@ -91,9 +92,26 @@
                           VerticalAlignment="Center" 
                           Style="{StaticResource ComboBoxFlatStyle}"
                           Margin="5"/>
+                <ComboBox x:Name="LanguageComboBox" 
+                          Grid.Column="7"
+                          VerticalAlignment="Center" 
+                          HorizontalAlignment="Right"
+                          Style="{StaticResource ComboBoxFlatStyle}"
+                          Margin="5,0,60,0"
+                          Width="120"
+                          Height="60"
+                          SelectionChanged="LanguageComboBox_SelectionChanged"
+                          >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                            <Image Source="{Binding}" Height="60" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                </ComboBox>
+
                 <TextBlock Grid.Column="7"
-                           Text="1.0.0"
-                           FontFamily="/Fonts/#Oxanium"
+                           Text="1.0.1"
+                           FontFamily="/Fonts/#Roboto"
                            Foreground="#DFDFDF"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Right"
@@ -113,7 +131,7 @@
                         Foreground="White"
                         Command="{Binding MinimizeCommand}" 
                         Click="MinimizeButton_Click"
-                        FontFamily="/Fonts/#Oxanium"
+                        FontFamily="/Fonts/#Roboto"
                         Margin="10"
                         VerticalAlignment="Top"/>
 
@@ -128,7 +146,7 @@
                         Foreground="White"
                         Command="{Binding MaximizeCommand}" 
                         Click="MaximizeButton_Click"
-                        FontFamily="/Fonts/#Oxanium"
+                        FontFamily="/Fonts/#Roboto"
                         Margin="10"
                         VerticalAlignment="Top"/>
 
@@ -143,7 +161,7 @@
                         Foreground="White"
                         Command="{Binding CloseCommand}" 
                         Click="CloseButton_Click"
-                        FontFamily="/Fonts/#Oxanium"
+                        FontFamily="/Fonts/#Roboto"
                         Margin="10"
                         VerticalAlignment="Top"/>
             </Grid>
@@ -159,40 +177,40 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="1">
-                    <RadioButton Content="Terminal"
+                    <RadioButton Content="{DynamicResource Terminal}"
                                  Height="50"
                                  Foreground="White"
                                  FontSize="16"
                                  Style="{StaticResource MenuButtonTheme}"
                                  IsChecked="True"
                                  Command="{Binding TerminalViewCommand}"
-                                 FontFamily="/Fonts/#Oxanium"/>
-                    <RadioButton Content="Telemetry"
+                                 FontFamily="/Fonts/#Roboto"/>
+                    <RadioButton Content="{DynamicResource Telemetry}"
                                  Height="50"
                                  Foreground="White"
                                  FontSize="16"
                                  Style="{StaticResource MenuButtonTheme}"
                                  Command="{Binding GenViewCommand}"
-                                 FontFamily="/Fonts/#Oxanium"/>
-                    <RadioButton Content="Generate"
+                                 FontFamily="/Fonts/#Roboto"/>
+                    <RadioButton Content="{DynamicResource Generate}"
                                  Height="50"
                                  Foreground="White"
                                  FontSize="16"
                                  Style="{StaticResource MenuButtonTheme}"
-                                 FontFamily="/Fonts/#Oxanium"/>
-                    <RadioButton Content="Decipher"
+                                 FontFamily="/Fonts/#Roboto"/>
+                    <RadioButton Content="{DynamicResource Decipher}"
                                  Height="50"
                                  Foreground="White"
                                  FontSize="16"
                                  Style="{StaticResource MenuButtonTheme}"
-                                 FontFamily="/Fonts/#Oxanium"/>
-                    <RadioButton Content="HOME"
+                                 FontFamily="/Fonts/#Roboto"/>
+                    <RadioButton Content="{DynamicResource HOME}"
                                  Height="50"
                                  Foreground="White"
                                  FontSize="16"
                                  Style="{StaticResource MenuButtonTheme}"
                                  Command="{Binding HomeViewCommand}"
-                                 FontFamily="/Fonts/#Oxanium"/>
+                                 FontFamily="/Fonts/#Roboto"/>
                 </StackPanel>
 
 

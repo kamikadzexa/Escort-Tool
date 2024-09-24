@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Windows;
 using Application = System.Windows.Application;
 
@@ -10,6 +11,7 @@ namespace Escort_Tool
     /// </summary>
     public partial class App : Application
     {
+
     }
 
 }

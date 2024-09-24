@@ -12,7 +12,7 @@
                     FontSize="28"
                     HorizontalAlignment="Left"
                    Margin="0,0,0,20"
-                   FontFamily="/Fonts/#Oxanium"/>
+                   FontFamily="/Fonts/#Roboto"/>
 
         <StackPanel Orientation="Horizontal"
                     Margin="0,0,0,8">
@@ -39,12 +39,12 @@
                                    Foreground="White"
                                    FontSize="28"
                                    Margin="20,10,10,0"
-                                   FontFamily="/Fonts/#Oxanium"/>
+                                   FontFamily="/Fonts/#Roboto"/>
                         <TextBlock Text="Just wait for it!"
                                    Foreground="White"
                                    FontSize="18"
                                    Margin="20,10,10,0"
-                                   FontFamily="/Fonts/#Oxanium"/>
+                                   FontFamily="/Fonts/#Roboto"/>
                     </StackPanel>
 
                     <Image Width="200"
@@ -92,7 +92,7 @@
                     FontSize="20"
                     HorizontalAlignment="Left"
                     Margin="0,0,0,10"
-                    FontFamily="/Fonts/#Oxanium"/>
+                    FontFamily="/Fonts/#Roboto"/>
             <StackPanel Orientation="Horizontal">
                 <Border Width="150"
                         Height="150"

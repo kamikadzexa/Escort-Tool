@@ -48,7 +48,7 @@ namespace Escort_Tool.MVVM.View
             // Output the buffer and add CRC BREAK if timer ticks
             if (!string.IsNullOrEmpty(buffer))
             {
-                buffer = " CRC BREAK " + buffer + " CRC BREAK ";
+                buffer = "XXX " + buffer + " XXX";
                 AppendToTextBox(buffer);
                 buffer = "";
             }
@@ -65,12 +65,12 @@ namespace Escort_Tool.MVVM.View
                 var elapsedMilliseconds = _stopwatch.Elapsed.TotalMilliseconds;
                 var formattedTime = TimeSpan.FromMilliseconds(elapsedMilliseconds).ToString("mm':'ss':'fff");
 
-                command = "Sent:  " + command;
+                command = (string)FindResource("Sent") + ":  " + command;
                 formattedData = $"{formattedTime} {command}";
             }
             else
             {
-                command = "Sent:  " + command;
+                command = (string)FindResource("Sent") + ":  " + command;
                 formattedData = command;
             }
 
@@ -158,7 +158,7 @@ namespace Escort_Tool.MVVM.View
 
                 if (string.IsNullOrEmpty(command))
                 {
-                    MainWindow.Instance.SetErrorText("Please enter a command");
+                    MainWindow.Instance.SetErrorText((string)FindResource("Please enter a command"));
                     return;
                 }
 
@@ -172,7 +172,7 @@ namespace Escort_Tool.MVVM.View
                     }
                     catch (Exception ex)
                     {
-                        MainWindow.Instance.SetErrorText("Wrong symbols or length");
+                        MainWindow.Instance.SetErrorText((string)FindResource("Wrong symbols or length"));
                     }
                 }
                 else
@@ -194,7 +194,7 @@ namespace Escort_Tool.MVVM.View
 
             if (string.IsNullOrEmpty(command))
             {
-                MainWindow.Instance.SetErrorText("Please enter a command");
+                MainWindow.Instance.SetErrorText((string)FindResource("Please enter a command"));
                 return;
             }
             if (CrcCheckBox.IsChecked == true)
@@ -208,7 +208,7 @@ namespace Escort_Tool.MVVM.View
                 }
                 catch (Exception ex)
                 {
-                    MainWindow.Instance.SetErrorText("Wrong symbols or length");
+                    MainWindow.Instance.SetErrorText((string)FindResource("Wrong symbols or length"));
                 }
 
             }
