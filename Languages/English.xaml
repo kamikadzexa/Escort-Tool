@@ -15,7 +15,7 @@
     <system:String x:Key="Send CRC">Send CRC</system:String>
     <system:String x:Key="Check CRC">Check CRC</system:String>
     <system:String x:Key="Send">Send</system:String>
-    <system:String x:Key="Sent">Sent</system:String>
+    <system:String x:Key="Sent"> Sent:  </system:String>
     <system:String x:Key="Wrong symbols or length">Wrong symbols or length</system:String>
     <system:String x:Key="Please enter a command">Please enter a command</system:String>
     <system:String x:Key="Output will be here">Output will be here</system:String>

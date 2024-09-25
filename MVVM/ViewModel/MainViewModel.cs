@@ -1,6 +1,4 @@
-﻿using System;
-using Escort_Tool.Core;
-using Escort_Tool.MVVM.View;
+﻿using Escort_Tool.Core;
 
 namespace Escort_Tool.MVVM.ViewModel
 {
@@ -20,11 +18,11 @@ namespace Escort_Tool.MVVM.ViewModel
         public object CurrentView
         {
             get { return _currentView; }
-            set 
-            { 
+            set
+            {
                 _currentView = value;
                 OnPropertyChanged();
-                    
+
             }
         }
 
@@ -36,7 +34,7 @@ namespace Escort_Tool.MVVM.ViewModel
 
             CurrentView = TerminalVm;
 
-            HomeViewCommand = new RelayCommand(o => 
+            HomeViewCommand = new RelayCommand(o =>
             {
                 CurrentView = HomeVm;
             });
@@ -49,6 +47,7 @@ namespace Escort_Tool.MVVM.ViewModel
             {
                 CurrentView = TerminalVm;
             });
+
         }
     }
 }

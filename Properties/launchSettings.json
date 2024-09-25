@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Escort Tool": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\E\\source\\repos\\Escort_Tool\\bin\\Debug",
+      "hotReloadEnabled": true
+    }
+  }
+}

@@ -15,7 +15,7 @@
     <system:String x:Key="Send CRC">Отправка CRC</system:String>
     <system:String x:Key="Check CRC">Проверка CRC</system:String>
     <system:String x:Key="Send">Отправить</system:String>
-    <system:String x:Key="Sent">Отправлено</system:String>
+    <system:String x:Key="Sent"> Отправлено:    </system:String>
     <system:String x:Key="Wrong symbols or length">Не корректная команда</system:String>
     <system:String x:Key="Please enter a command">Введите команду</system:String>
     <system:String x:Key="Output will be here">Полученные данные будут здесь</system:String>

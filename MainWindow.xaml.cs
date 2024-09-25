@@ -1,21 +1,17 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Input;
-using System.IO.Ports;
-using System.Windows.Threading;
-using System.Windows.Interop;
-using MessageBox = System.Windows.MessageBox;
-using Escort_Tool.MVVM.View;
-using Application = System.Windows.Application;
+﻿using Escort_Tool.MVVM.View;
 using Escort_Tool.MVVM.ViewModel;
 using System.IO;
+using System.IO.Ports;
 using System.Media;
 using System.Reflection;
-using UserControl = System.Windows.Controls.UserControl;
+using System.Windows;
 using System.Windows.Controls;
-using System.Globalization;
-using System.Resources;
+using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
+using Application = System.Windows.Application;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Escort_Tool
 {
@@ -53,16 +49,19 @@ namespace Escort_Tool
 
             if (LanguageComboBox.SelectedIndex is 0)
             {
-                    ChangeLanguage("en-US");
-                
+                ChangeLanguage("en-US");
+
             }
             if (LanguageComboBox.SelectedIndex is 1)
             {
                 ChangeLanguage("ru-RU");
             }
         }
+
+
         private void ChangeLanguage(string language)
         {
+
             ResourceDictionary dict = new ResourceDictionary();
 
             switch (language)
@@ -95,6 +94,7 @@ namespace Escort_Tool
                 if (_mainViewModel.CurrentView is TerminalViewModel terminalVm && !string.IsNullOrEmpty(data))
                 {
                     TerminalView.Instance.ReceiveData(data);
+
                 }
             });
         }
@@ -119,7 +119,7 @@ namespace Escort_Tool
             // Set the ComboBox items
             LanguageComboBox.ItemsSource = new[] { image1, image2 };
             LanguageComboBox.SelectedIndex = 0;
-            
+
 
         }
 
@@ -205,8 +205,8 @@ namespace Escort_Tool
                 {
                     if (_mainViewModel.CurrentView is TerminalViewModel terminalVm)
                     {
-                         TerminalView.Instance.ReceiveCommand(formattedCommand);
-                        
+                        TerminalView.Instance.ReceiveCommand(formattedCommand);
+
                     }
 
                 });
@@ -220,7 +220,7 @@ namespace Escort_Tool
         private byte[] HexStringToByteArray(string hex)
         {
             hex = hex.Replace(" ", ""); // Remove any spaces
-            hex = hex.Replace("$", ""); 
+            hex = hex.Replace("$", "");
             int length = hex.Length;
             byte[] bytes = new byte[length / 2];
             for (int i = 0; i < length; i += 2)
@@ -324,7 +324,7 @@ namespace Escort_Tool
                 // Port has been disconnected
                 Dispatcher.Invoke(() =>
                 {
-                SetErrorText($"{_lastSelectedPort}" + " " + (string)FindResource("disconnected")); 
+                    SetErrorText($"{_lastSelectedPort}" + " " + (string)FindResource("disconnected"));
                     _serialPort.Close();
                     _lastSelectedPort = null;
                     TogglePortButton.Content = (string)FindResource("Open Port"); // Update button content
@@ -354,6 +354,11 @@ namespace Escort_Tool
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_serialPort != null && _serialPort.IsOpen == true)
+            {
+                _serialPort.Close();
+            }
+
             this.Close();
         }
         private void TopBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -379,7 +384,7 @@ namespace Escort_Tool
                 try
                 {
                     _serialPort.Close();
-                    TogglePortButton.Content = (string)FindResource("Open Port"); 
+                    TogglePortButton.Content = (string)FindResource("Open Port");
                     _isPortOpen = false;
                     PortComboBox.IsEnabled = true; // Re-enable the ComboBox
                     BaudRateComboBox.IsEnabled = true;
@@ -400,11 +405,11 @@ namespace Escort_Tool
                     BaudRate = (int)BaudRateComboBox.SelectedItem,
                     DataBits = (int)DataBitsComboBox.SelectedItem,
                     Parity = (Parity)ParityComboBox.SelectedItem,
-                    StopBits = (StopBits)StopBitsComboBox.SelectedItem,                    
+                    StopBits = (StopBits)StopBitsComboBox.SelectedItem,
                     Handshake = Handshake.None,
                     ReadTimeout = 500,
                     WriteTimeout = 500
-                }; 
+                };
 
                 try
                 {

@@ -6,13 +6,13 @@
              xmlns:local="clr-namespace:Escort_Tool.MVVM.View"
              mc:Ignorable="d" 
              xmlns:vm="clr-namespace:Escort_Tool.MVVM.ViewModel"
-             d:DesignHeight="450" d:DesignWidth="900">
+             d:DesignHeight="450" d:DesignWidth="950">
     
     
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="0"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -31,8 +31,46 @@
                          Text="{Binding ReceivedData}"
                          Style="{StaticResource ModernTextbox}"
                          VerticalScrollBarVisibility="Auto"/>
-        <Grid Grid.Row="2">
+        <Button Content="ADD" 
+                Command="{Binding AddCommandElementCommand}" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Top" 
+                Margin="10" 
+                Grid.Column="1"/>
+        <!-- StackPanel to hold dynamic elements (command TextBoxes and checkboxes) -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="10" Orientation="Vertical">
+            <ItemsControl ItemsSource="{Binding CommandElements}" 
+                      Grid.Row="1" 
+                      Grid.Column="1" 
+                      Grid.RowSpan="2" 
+                      Margin="10">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" 
+                            BorderBrush="Black" 
+                            Padding="5" 
+                            Margin="5">
+                            <StackPanel>
+                                <!-- ComboBox for selecting sending mode -->
+                                <ComboBox ItemsSource="{Binding DataContext.SendingModes, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                      SelectedItem="{Binding SelectedSendingMode, UpdateSourceTrigger=PropertyChanged}"
+                                      Width="200" />
 
+
+                                <CheckBox Content="Enable Send" IsChecked="{Binding IsSendingEnabled}"/>
+                                <TextBox Text="{Binding CommandText}" Margin="2"/>
+                                <TextBox Text="{Binding TimeOrPromptText}" Margin="2"/>
+                                <Button Content="Remove" 
+                                    Command="{Binding DataContext.RemoveCommandElementCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
+                                    CommandParameter="{Binding}" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+        
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>

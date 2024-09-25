@@ -1,23 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Diagnostics;
-using System.Windows.Markup;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MessageBox = System.Windows.MessageBox;
-using UserControl = System.Windows.Controls.UserControl;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Windows.Threading;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace Escort_Tool.MVVM.View
 {
@@ -32,6 +17,9 @@ namespace Escort_Tool.MVVM.View
         private string buffer = "";
         private DispatcherTimer _timer;
 
+
+
+
         public TerminalView()
         {
             Instance = this;
@@ -41,7 +29,10 @@ namespace Escort_Tool.MVVM.View
                 Interval = TimeSpan.FromMilliseconds(100)
             };
             _timer.Tick += Timer_Tick;
+
         }
+
+
 
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -57,24 +48,60 @@ namespace Escort_Tool.MVVM.View
 
         public void ReceiveCommand(string command)
         {
-
-            string formattedData;
-            if (TimeCheckBox.IsChecked == true)
+            string _formattedData = command;
+            if (CheckCrcCheckBox.IsChecked == true)
             {
-                // Get the elapsed time in milliseconds with high precision
-                var elapsedMilliseconds = _stopwatch.Elapsed.TotalMilliseconds;
-                var formattedTime = TimeSpan.FromMilliseconds(elapsedMilliseconds).ToString("mm':'ss':'fff");
+                string _lastTwoCharacters = _formattedData.Length >= 2 ? _formattedData.Substring(_formattedData.Length - 2) : _formattedData;
+                string _ForCheck = _formattedData.Length >= 2 ? _formattedData.Substring(0, _formattedData.Length - 2) : "";
+                if (_ForCheck.Length > 0 && GetCrc8HexString(HexStringToByteArray(_ForCheck)) == _lastTwoCharacters)
+                {
+                    if (TimeCheckBox.IsChecked == true)
+                    {
+                        // Get the elapsed time in milliseconds with high precision
+                        var elapsedMilliseconds = _stopwatch.Elapsed.TotalMilliseconds;
+                        var formattedTime = TimeSpan.FromMilliseconds(elapsedMilliseconds).ToString("mm':'ss':'fff") + " ";
 
-                command = (string)FindResource("Sent") + ":  " + command;
-                formattedData = $"{formattedTime} {command}";
+                        _formattedData = "✔  " + formattedTime + (string)FindResource("Sent") + _formattedData;
+                    }
+                    else
+                    {
+                        _formattedData = "✔  " + (string)FindResource("Sent") + _formattedData;
+                    }
+                }
+                else
+                {
+                    if (TimeCheckBox.IsChecked == true)
+                    {
+                        // Get the elapsed time in milliseconds with high precision
+                        var elapsedMilliseconds = _stopwatch.Elapsed.TotalMilliseconds;
+                        var formattedTime = TimeSpan.FromMilliseconds(elapsedMilliseconds).ToString("mm':'ss':'fff" + " ");
+
+                        _formattedData = "X  " + formattedTime + (string)FindResource("Sent") + _formattedData;
+                    }
+                    else
+                    {
+                        _formattedData = "X  " + (string)FindResource("Sent") + _formattedData;
+                    }
+                }
             }
             else
             {
-                command = (string)FindResource("Sent") + ":  " + command;
-                formattedData = command;
+                if (TimeCheckBox.IsChecked == true)
+                {
+                    // Get the elapsed time in milliseconds with high precision
+                    var elapsedMilliseconds = _stopwatch.Elapsed.TotalMilliseconds;
+                    var formattedTime = TimeSpan.FromMilliseconds(elapsedMilliseconds).ToString("mm':'ss':'fff" + " ");
+
+                    _formattedData = formattedTime + (string)FindResource("Sent") + _formattedData;
+                }
+                else
+                {
+                    _formattedData = (string)FindResource("Sent") + _formattedData;
+                }
             }
 
-            AppendToTextBox(formattedData);
+
+            AppendToTextBox(_formattedData);
         }
 
         public void ReceiveData(string data)
@@ -94,7 +121,6 @@ namespace Escort_Tool.MVVM.View
                 if (ForCheck.Length > 0 && GetCrc8HexString(HexStringToByteArray(ForCheck)) == lastTwoCharacters)
                 {
                     _timer.Stop(); // Stop the timer when valid CRC is found
-
                     string formattedData;
                     if (TimeCheckBox.IsChecked == true)
                     {
@@ -190,6 +216,7 @@ namespace Escort_Tool.MVVM.View
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
+
             string command = Command.Text;
 
             if (string.IsNullOrEmpty(command))
@@ -266,7 +293,10 @@ namespace Escort_Tool.MVVM.View
             return bytes;
         }
 
-
+        public void Fsend(string commmmand)
+        {
+            MainWindow.Instance.ProcessAndSendCommand(commmmand);
+        }
 
     }
 }
