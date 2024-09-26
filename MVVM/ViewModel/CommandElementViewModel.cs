@@ -8,9 +8,12 @@ namespace Escort_Tool.MVVM.ViewModel
 {
     public class CommandElementViewModel : ObservableObject, IDisposable
     {
-        private string _commandText;
-        private string _TimeOrPromptText;
-        private string _promptText;
+        private bool _CalcCRC;
+        private string _CommandText;
+        private string _VTimeText;
+        private string _VPromptText;
+        private string _TimeText;
+        private string _PromptText;
         private bool _isSendingEnabled;
         private string _selectedSendingMode;
         private DispatcherTimer _timer;
@@ -20,22 +23,83 @@ namespace Escort_Tool.MVVM.ViewModel
             _stopwatch = new Stopwatch();
             _timer = new DispatcherTimer();
             _timer.Tick += Timer_Tick;
-
-            // Initialize the timer with a default period (e.g., 1 second)
-            TimeOrPromptText = "1000";
+            TimeText = "1000";
             UpdateTimerInterval();
         }
-        
+
+        public bool CalcCRC
+        {
+            get => _CalcCRC;
+            set
+            {
+                if (_CalcCRC != value)
+                {
+                    _CalcCRC = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+        public string VTimeText
+        {
+            get => _VTimeText;
+            set
+            {
+                if (_VTimeText != value)
+                {
+                    _VTimeText = value;
+                    OnPropertyChanged();
+                    if (_VTimeText == "Collapsed") { _timer.Stop(); }
+                }
+            }
+        }
+
+        public string VPromptText
+        {
+            get => _VPromptText;
+            set { _VPromptText = value; OnPropertyChanged(); }
+        }
 
         public string CommandText
         {
-            get => _commandText;
-            set { _commandText = value; OnPropertyChanged(); }
+            get => _CommandText;
+            set
+            {
+                if (_CommandText != value)
+                {
+                    _CommandText = MainWindow.Instance.HexStringToByteArrayAndBack(value, CalcCRC);
+                    OnPropertyChanged();
+                }
+            }
         }
 
+        public string PromptText
+        {
+            get => _PromptText;
+            set 
+            {
+                if (_PromptText != value)
+                {
+                    _PromptText = MainWindow.Instance.HexStringToByteArrayAndBack(value, CalcCRC);
+                }
+                OnPropertyChanged(); 
+            }
+        }
 
-
-
+        public string TimeText
+        {
+            get => _TimeText;
+            set
+            {
+                if (_TimeText != value)
+                {
+                    _TimeText = value;
+                    OnPropertyChanged();
+                    UpdateTimerInterval();
+                }
+            }
+        }
         public bool IsSendingEnabled
         {
             get => _isSendingEnabled;
@@ -54,45 +118,34 @@ namespace Escort_Tool.MVVM.ViewModel
         {
             get => _selectedSendingMode;
             set 
-            { 
-                _selectedSendingMode = value;
-                IsSendingEnabled = false;
-                HandleSendingStateChanged();
-
-                if (_selectedSendingMode == "Send on Prompt")
-                {
-                    TimeOrPromptText = "";
-
-                }
-                if (_selectedSendingMode == "Send on Timer")
-                {
-                    TimeOrPromptText = "1000";
-                }
-
-                OnPropertyChanged(); 
-
-            }
-        }
-
-        public string TimeOrPromptText
-        {
-            get => _TimeOrPromptText;
-            set
             {
-                if (_TimeOrPromptText != value)
+                if (_selectedSendingMode != value)
                 {
-                    _TimeOrPromptText = value;
+                    _selectedSendingMode = value;
+                    IsSendingEnabled = false;
+
+                    if (_selectedSendingMode == "Send on Prompt")
+                    {
+                        VTimeText = "Collapsed";
+                        VPromptText = "Visible";
+
+                    }
+                    if (_selectedSendingMode == "Send on Timer")
+                    {
+                        VPromptText = "Collapsed";
+                        VTimeText = "Visible";
+                        TimeText = "1000";
+                    }
+
                     OnPropertyChanged();
-                    UpdateTimerInterval();
                 }
             }
         }
-
 
 
         private void HandleSendingStateChanged()
         {
-            if (IsSendingEnabled)
+            if (IsSendingEnabled && SelectedSendingMode == "Send on Timer")
             {
 
                 UpdateTimerInterval();
@@ -114,37 +167,25 @@ namespace Escort_Tool.MVVM.ViewModel
 
         private void Send()
         {
-            if (CommandText != null)
-            {
-                MainWindow.Instance.ProcessAndSendCommand(CommandText);
-            }
+             if (!string.IsNullOrEmpty(CommandText))
+                {
+                    MainWindow.Instance.ProcessAndSendCommand(CommandText);
+                }
         }
 
         private void UpdateTimerInterval()
         {
-            if (_selectedSendingMode == "Send on Timer")
-            {
-                if (int.TryParse(TimeOrPromptText, out int interval))
+                if (int.TryParse(TimeText, out int interval))
                 {
                     _timer.Interval = TimeSpan.FromMilliseconds(interval);
                 }
                 else
                 {
                     MainWindow.Instance.SetErrorText("Invalid period");
-                    TimeOrPromptText = "1000";
+                    TimeText = "1000";
                     _timer.Interval = TimeSpan.FromMilliseconds(1000);
                 }
-            }
-            if(_selectedSendingMode == "Send on Prompt")
-            {
-                _timer.Interval = TimeSpan.FromMilliseconds(10000);
-                _timer.Stop();
-            }
-            if (_selectedSendingMode == null)
-            {
-                _timer.Interval = TimeSpan.FromMilliseconds(10000);
-                _timer.Stop();
-            }
+
         }
 
         // Implement IDisposable
@@ -161,5 +202,7 @@ namespace Escort_Tool.MVVM.ViewModel
             // Dispose other resources if needed
             _stopwatch = null;
         }
+
+
     }
 }

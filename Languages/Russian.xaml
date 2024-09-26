@@ -16,7 +16,7 @@
     <system:String x:Key="Check CRC">Проверка CRC</system:String>
     <system:String x:Key="Send">Отправить</system:String>
     <system:String x:Key="Sent"> Отправлено:    </system:String>
-    <system:String x:Key="Wrong symbols or length">Не корректная команда</system:String>
+    <system:String x:Key="Wrong symbols or length">Некорректная команда</system:String>
     <system:String x:Key="Please enter a command">Введите команду</system:String>
     <system:String x:Key="Output will be here">Полученные данные будут здесь</system:String>
     <system:String x:Key="Enter command here">Введите команду</system:String>
@@ -24,4 +24,6 @@
     <system:String x:Key="COM port is not open">Порт не открыт</system:String>
     <system:String x:Key="Please select a COM port">Выберите Порт</system:String>
     <system:String x:Key="Cannot open Com port">Не удается открыть порт</system:String>
+    <system:String x:Key="Invalid length">Некорректная длина</system:String>
+    <system:String x:Key="Wrong symbols">Некорректные символы</system:String>
 </ResourceDictionary>

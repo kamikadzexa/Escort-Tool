@@ -9,14 +9,13 @@
                             BorderThickness="0">
                         <Grid>
                             <!-- ContentPresenter for CheckBox content -->
-                            <ContentPresenter HorizontalAlignment="Center" Height="26" Width="25" VerticalAlignment="Center"/>
+                            <ContentPresenter  Height="27" Width="25" VerticalAlignment="Center"/>
                             <!-- Green checkmark shown when IsChecked is True -->
                             <Path x:Name="CheckMark"
                                   Data="M 0 8 L 5 13 L 12 3"
                                   Stroke="#00cc00"
                                   StrokeThickness="4"
                                   Visibility="Collapsed"
-                                  HorizontalAlignment="Center"
                                   VerticalAlignment="Center"
                                   Margin="5"/>
                         </Grid>

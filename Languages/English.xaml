@@ -24,6 +24,8 @@
     <system:String x:Key="COM port is not open">COM port is not open</system:String>
     <system:String x:Key="Please select a COM port">Please select a COM port</system:String>
     <system:String x:Key="Cannot open Com port">Cannot open Com port</system:String>
+    <system:String x:Key="Invalid length">Invalid length</system:String>
+    <system:String x:Key="Wrong symbols">Wrong symbols</system:String>
 
     
 </ResourceDictionary>

@@ -8,8 +8,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Markup;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 
@@ -50,11 +52,16 @@ namespace Escort_Tool
             if (LanguageComboBox.SelectedIndex is 0)
             {
                 ChangeLanguage("en-US");
-
             }
             if (LanguageComboBox.SelectedIndex is 1)
             {
                 ChangeLanguage("ru-RU");
+            }
+
+            if (_serialPort != null)
+            {
+                if (_serialPort.IsOpen) { TogglePortButton.Content = (string)FindResource("Close Port"); }
+                else { TogglePortButton.Content = (string)FindResource("Open Port"); }
             }
         }
 
@@ -94,7 +101,6 @@ namespace Escort_Tool
                 if (_mainViewModel.CurrentView is TerminalViewModel terminalVm && !string.IsNullOrEmpty(data))
                 {
                     TerminalView.Instance.ReceiveData(data);
-
                 }
             });
         }
@@ -174,11 +180,14 @@ namespace Escort_Tool
 
         public void ProcessAndSendCommand(string command)
         {
-            // Replace spaces and $ in the command string
-            string hexCommand = command.Replace(" ", "").Replace("$", "");
+            if (!string.IsNullOrEmpty(command))
+            {
+                // Replace spaces and $ in the command string
+                string hexCommand = command.Replace(" ", "").Replace("$", "");
 
-            // Send the processed command to the COM port
-            SendCommandToComPort(hexCommand);
+                // Send the processed command to the COM port
+                SendCommandToComPort(hexCommand);
+            }
         }
 
         private void SendCommandToComPort(string hexCommand)
@@ -197,18 +206,15 @@ namespace Escort_Tool
                 // Send the byte array to the COM port
                 _serialPort.Write(bytesToSend, 0, bytesToSend.Length);
 
-                // Format the sent command as hex with spaces for display
-                string formattedCommand = BitConverter.ToString(bytesToSend).Replace("-", " ");
+                string _data = BitConverter.ToString(bytesToSend).Replace("-", " ");
 
                 // Update the output with the sent command
                 Dispatcher.Invoke(() =>
                 {
-                    if (_mainViewModel.CurrentView is TerminalViewModel terminalVm)
+                    if (_mainViewModel.CurrentView is TerminalViewModel terminalVm && !string.IsNullOrEmpty(_data))
                     {
-                        TerminalView.Instance.ReceiveCommand(formattedCommand);
-
+                        TerminalView.Instance.ReceiveCommand(_data);
                     }
-
                 });
             }
             catch (Exception ex)
@@ -216,20 +222,6 @@ namespace Escort_Tool
                 SetErrorText((string)FindResource("Wrong symbols or length"));
             }
         }
-
-        private byte[] HexStringToByteArray(string hex)
-        {
-            hex = hex.Replace(" ", ""); // Remove any spaces
-            hex = hex.Replace("$", "");
-            int length = hex.Length;
-            byte[] bytes = new byte[length / 2];
-            for (int i = 0; i < length; i += 2)
-            {
-                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
-            }
-            return bytes;
-        }
-
 
 
         private byte[] ReadSerialPort()
@@ -429,6 +421,67 @@ namespace Escort_Tool
                     SetErrorText((string)FindResource("Cannot open Com port"));
                 }
             }
+        }
+
+        public byte CalculateCrc8(byte[] data)
+        {
+            byte crc = 0; // Initialize CRC value to 0
+            foreach (byte b in data)
+            {
+                crc = Crc8(b, crc); // Calculate CRC for each byte
+            }
+            return crc;
+        }
+
+        // CRC-8 calculation method based on provided algorithm
+        public byte Crc8(byte data, byte crc)
+        {
+            byte i = (byte)(data ^ crc);
+            crc = 0;
+            if ((i & 0x01) != 0) crc ^= 0x5e;
+            if ((i & 0x02) != 0) crc ^= 0xbc;
+            if ((i & 0x04) != 0) crc ^= 0x61;
+            if ((i & 0x08) != 0) crc ^= 0xc2;
+            if ((i & 0x10) != 0) crc ^= 0x9d;
+            if ((i & 0x20) != 0) crc ^= 0x23;
+            if ((i & 0x40) != 0) crc ^= 0x46;
+            if ((i & 0x80) != 0) crc ^= 0x8c;
+            return crc;
+        }
+
+        // Method to calculate CRC-8 and return as a hex string
+        public string GetCrc8HexString(byte[] data)
+        {
+            byte crc = CalculateCrc8(data);
+            return crc.ToString("X2"); // Convert CRC value to hex string
+        }
+
+        public byte[] HexStringToByteArray(string hex)
+        {
+            hex = hex.Replace(" ", ""); // Remove any spaces
+            hex = hex.Replace("$", "");
+            int length = hex.Length;
+            byte[] bytes = new byte[length / 2];
+            for (int i = 0; i < length; i += 2)
+            {
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            }
+            return bytes;
+        }
+
+        public string HexStringToByteArrayAndBack(string hex,bool crc)
+        {
+            hex = hex.Replace(" ", ""); // Remove any spaces
+            hex = hex.Replace("$", "");
+            int length = hex.Length;
+            byte[] bytes = new byte[length / 2];
+            for (int i = 0; i < length; i += 2)
+            {
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            }
+            string _data = BitConverter.ToString(bytes).Replace("-", " ");
+            if (crc) { _data += " " +GetCrc8HexString(bytes); }
+            return _data;
         }
     }
 }

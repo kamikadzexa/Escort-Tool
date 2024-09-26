@@ -1,5 +1,10 @@
-﻿using System.Diagnostics;
+﻿using Escort_Tool.Core;
+using Escort_Tool.MVVM.ViewModel;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using UserControl = System.Windows.Controls.UserControl;
@@ -18,8 +23,6 @@ namespace Escort_Tool.MVVM.View
         private DispatcherTimer _timer;
 
 
-
-
         public TerminalView()
         {
             Instance = this;
@@ -29,10 +32,8 @@ namespace Escort_Tool.MVVM.View
                 Interval = TimeSpan.FromMilliseconds(100)
             };
             _timer.Tick += Timer_Tick;
-
+            DataContext = new TerminalViewModel();
         }
-
-
 
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -53,7 +54,7 @@ namespace Escort_Tool.MVVM.View
             {
                 string _lastTwoCharacters = _formattedData.Length >= 2 ? _formattedData.Substring(_formattedData.Length - 2) : _formattedData;
                 string _ForCheck = _formattedData.Length >= 2 ? _formattedData.Substring(0, _formattedData.Length - 2) : "";
-                if (_ForCheck.Length > 0 && GetCrc8HexString(HexStringToByteArray(_ForCheck)) == _lastTwoCharacters)
+                if (_ForCheck.Length > 0 && MainWindow.Instance.GetCrc8HexString(MainWindow.Instance.HexStringToByteArray(_ForCheck)) == _lastTwoCharacters)
                 {
                     if (TimeCheckBox.IsChecked == true)
                     {
@@ -74,7 +75,7 @@ namespace Escort_Tool.MVVM.View
                     {
                         // Get the elapsed time in milliseconds with high precision
                         var elapsedMilliseconds = _stopwatch.Elapsed.TotalMilliseconds;
-                        var formattedTime = TimeSpan.FromMilliseconds(elapsedMilliseconds).ToString("mm':'ss':'fff" + " ");
+                        var formattedTime = TimeSpan.FromMilliseconds(elapsedMilliseconds).ToString("mm':'ss':'fff") + " ";
 
                         _formattedData = "X  " + formattedTime + (string)FindResource("Sent") + _formattedData;
                     }
@@ -90,7 +91,7 @@ namespace Escort_Tool.MVVM.View
                 {
                     // Get the elapsed time in milliseconds with high precision
                     var elapsedMilliseconds = _stopwatch.Elapsed.TotalMilliseconds;
-                    var formattedTime = TimeSpan.FromMilliseconds(elapsedMilliseconds).ToString("mm':'ss':'fff" + " ");
+                    var formattedTime = TimeSpan.FromMilliseconds(elapsedMilliseconds).ToString("mm':'ss':'fff") + " ";
 
                     _formattedData = formattedTime + (string)FindResource("Sent") + _formattedData;
                 }
@@ -99,7 +100,6 @@ namespace Escort_Tool.MVVM.View
                     _formattedData = (string)FindResource("Sent") + _formattedData;
                 }
             }
-
 
             AppendToTextBox(_formattedData);
         }
@@ -118,7 +118,7 @@ namespace Escort_Tool.MVVM.View
             if (CheckCrcCheckBox.IsChecked == true)
             {
                 // CRC check is active
-                if (ForCheck.Length > 0 && GetCrc8HexString(HexStringToByteArray(ForCheck)) == lastTwoCharacters)
+                if (ForCheck.Length > 0 && MainWindow.Instance.GetCrc8HexString(MainWindow.Instance.HexStringToByteArray(ForCheck)) == lastTwoCharacters)
                 {
                     _timer.Stop(); // Stop the timer when valid CRC is found
                     string formattedData;
@@ -136,6 +136,19 @@ namespace Escort_Tool.MVVM.View
                     }
                     formattedData = "✔  " + formattedData;
                     AppendToTextBox(formattedData);
+                    var viewModel = DataContext as TerminalViewModel;
+                    foreach (var element in viewModel.CommandElements)
+                    {
+                        if (buffer != "" && buffer != null && buffer != " " && element.PromptText != null)
+                        {
+                            string _buffer = buffer.Replace(" ", "");
+                            string _prompt = element.PromptText.Replace(" ", "");
+                            if (element.IsSendingEnabled && element.SelectedSendingMode == "Send on Prompt" && _prompt == _buffer)
+                            {
+                                MainWindow.Instance.ProcessAndSendCommand(element.CommandText);
+                            }
+                        }
+                    }
                     buffer = "";
                 }
             }
@@ -157,6 +170,19 @@ namespace Escort_Tool.MVVM.View
                     formattedData = buffer;
                 }
                 AppendToTextBox(formattedData);
+                var viewModel = DataContext as TerminalViewModel;
+                foreach (var element in viewModel.CommandElements)
+                {
+                    if (buffer != "" && buffer != null && buffer != " " && element.PromptText != null)
+                    {
+                        string _buffer = buffer.Replace(" ", "");                        
+                        string _prompt = element.PromptText.Replace(" ", "");
+                        if (element.IsSendingEnabled && element.SelectedSendingMode == "Send on Prompt" && _prompt == _buffer)
+                        {
+                            MainWindow.Instance.ProcessAndSendCommand(element.CommandText);
+                        }
+                    }
+                }
                 buffer = "";
             }
         }
@@ -179,34 +205,10 @@ namespace Escort_Tool.MVVM.View
         {
             if (e.Key == Key.Enter)
             {
-                Command.Focus();
-                string command = Command.Text;
-
-                if (string.IsNullOrEmpty(command))
-                {
-                    MainWindow.Instance.SetErrorText((string)FindResource("Please enter a command"));
-                    return;
-                }
-
-                if (CrcCheckBox.IsChecked == true)
-                {
-                    try
-                    {
-                        byte[] HexCommand = HexStringToByteArray(command);
-                        command += GetCrc8HexString(HexCommand);
-                        MainWindow.Instance.ProcessAndSendCommand(command);
-                    }
-                    catch (Exception ex)
-                    {
-                        MainWindow.Instance.SetErrorText((string)FindResource("Wrong symbols or length"));
-                    }
-                }
-                else
-                {
-                    MainWindow.Instance.ProcessAndSendCommand(command);
-                }
+                SendButton_Click(sender, e);
             }
         }
+
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
@@ -217,85 +219,45 @@ namespace Escort_Tool.MVVM.View
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
 
-            string command = Command.Text;
+            string command = Command.Text.Replace(" ","");
 
-            if (string.IsNullOrEmpty(command))
+            if (string.IsNullOrEmpty(command) || command.Length < 2)
             {
                 MainWindow.Instance.SetErrorText((string)FindResource("Please enter a command"));
                 return;
             }
-            if (CrcCheckBox.IsChecked == true)
+            if (command.Length % 2 != 0)
             {
-
-                try
-                {
-                    byte[] HexCommand = HexStringToByteArray(command);
-                    command += GetCrc8HexString(HexCommand);
-                    MainWindow.Instance.ProcessAndSendCommand(command);
-                }
-                catch (Exception ex)
-                {
-                    MainWindow.Instance.SetErrorText((string)FindResource("Wrong symbols or length"));
-                }
-
+                MainWindow.Instance.SetErrorText((string)FindResource("Invalid length"));
+                return;
             }
-            else
+            try
             {
+                if (CrcCheckBox.IsChecked == true && command.Length > 2)
+                {
+                    string lastTwoCharacters = command.Length >= 2 ? command.Substring(command.Length - 2) : command;
+                    string ForCheck = command.Length >= 2 ? command.Substring(0, command.Length - 2) : "";
+                    if (ForCheck.Length > 0 && MainWindow.Instance.GetCrc8HexString(MainWindow.Instance.HexStringToByteArray(ForCheck)) == lastTwoCharacters)
+                    {
+                        Command.Text = MainWindow.Instance.HexStringToByteArrayAndBack(Command.Text, false);
+                    }
+                    else
+                    {
+                        Command.Text = MainWindow.Instance.HexStringToByteArrayAndBack(Command.Text, true);
+                    }
+                }
+                else
+                {
+                    Command.Text = MainWindow.Instance.HexStringToByteArrayAndBack(Command.Text, false);
+                }
+                command = Command.Text;
                 MainWindow.Instance.ProcessAndSendCommand(command);
             }
-        }
-
-        private const byte Polynomial = 0x31; // Polynomial x^8 + x^5 + x^4 + 1 (0x31 in hexadecimal)
-
-        private static byte CalculateCrc8(byte[] data)
-        {
-            byte crc = 0; // Initialize CRC value to 0
-            foreach (byte b in data)
+            catch
             {
-                crc = Crc8(b, crc); // Calculate CRC for each byte
+                MainWindow.Instance.SetErrorText((string)FindResource("Wrong symbols"));
             }
-            return crc;
-        }
 
-        // CRC-8 calculation method based on provided algorithm
-        private static byte Crc8(byte data, byte crc)
-        {
-            byte i = (byte)(data ^ crc);
-            crc = 0;
-            if ((i & 0x01) != 0) crc ^= 0x5e;
-            if ((i & 0x02) != 0) crc ^= 0xbc;
-            if ((i & 0x04) != 0) crc ^= 0x61;
-            if ((i & 0x08) != 0) crc ^= 0xc2;
-            if ((i & 0x10) != 0) crc ^= 0x9d;
-            if ((i & 0x20) != 0) crc ^= 0x23;
-            if ((i & 0x40) != 0) crc ^= 0x46;
-            if ((i & 0x80) != 0) crc ^= 0x8c;
-            return crc;
-        }
-
-        // Method to calculate CRC-8 and return as a hex string
-        private static string GetCrc8HexString(byte[] data)
-        {
-            byte crc = CalculateCrc8(data);
-            return crc.ToString("X2"); // Convert CRC value to hex string
-        }
-
-        private byte[] HexStringToByteArray(string hex)
-        {
-            hex = hex.Replace(" ", ""); // Remove any spaces
-            hex = hex.Replace("$", "");
-            int length = hex.Length;
-            byte[] bytes = new byte[length / 2];
-            for (int i = 0; i < length; i += 2)
-            {
-                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
-            }
-            return bytes;
-        }
-
-        public void Fsend(string commmmand)
-        {
-            MainWindow.Instance.ProcessAndSendCommand(commmmand);
         }
 
     }

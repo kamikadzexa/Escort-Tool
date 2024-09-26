@@ -110,7 +110,7 @@
                 </ComboBox>
 
                 <TextBlock Grid.Column="7"
-                           Text="1.0.1"
+                           Text="1.0.2"
                            FontFamily="/Fonts/#Roboto"
                            Foreground="#DFDFDF"
                            VerticalAlignment="Center"

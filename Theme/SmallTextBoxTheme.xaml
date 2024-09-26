@@ -28,61 +28,8 @@
         </Setter>
     </Style>
 
-    <Style TargetType="ScrollBar" x:Key="_ModernScrollBar">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ScrollBar">
-                    <Grid Background="Transparent" Margin="0,0,-15,0">
-                        <Track Name="PART_Track" IsDirectionReversed="True">
-
-                            <Track.Thumb>
-                                <Thumb>
-                                    <Thumb.Template>
-                                        <ControlTemplate TargetType="Thumb">
-                                            <Border Background="#444152"
-                                                    Width="10"
-                                                    CornerRadius="5"/>
-                                        </ControlTemplate>
-                                    </Thumb.Template>
-                                </Thumb>
-                            </Track.Thumb>
-
-                        </Track>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="ScrollViewer" x:Key="ModernScrollViewer">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ScrollViewer">
-                    <Grid>
-                        <!-- Content where the scrollable content will go -->
-                        <Grid Name="ContentGrid" Background="{TemplateBinding Background}">
-                            <ScrollContentPresenter />
-                        </Grid>
-
-                        <!-- Vertical ScrollBar -->
-                        <ScrollBar Name="PART_VerticalScrollBar"
-                               Style="{StaticResource _ModernScrollBar}"
-                               Orientation="Vertical" 
-                               Margin="15,0,10,0"    
-                               HorizontalAlignment="Right"    
-                               Grid.Column="1"
-                               Maximum="{TemplateBinding ScrollableHeight}"
-                               ViewportSize="{TemplateBinding ViewportHeight}"
-                               Value="{TemplateBinding VerticalOffset}"
-                               Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <!-- TextBox Style -->
-    <Style TargetType="{x:Type TextBox}" x:Key="ModernTextbox">
+    <Style TargetType="{x:Type TextBox}" x:Key="SmallModernTextbox">
         <Setter Property="Foreground" Value="#DFDFDF" />
         <Setter Property="CaretBrush" Value="#DFDFDF" />
         <Setter Property="FontSize" Value="16" />
@@ -99,7 +46,7 @@
                                        Text="{TemplateBinding Tag}"
                                        VerticalAlignment="Top"
                                        HorizontalAlignment="Left"
-                                       Margin="15"
+                                       Margin="5"
                                        FontFamily="/Fonts/#Roboto"
                                        FontSize="16"
                                        Foreground="#DFDFDF">
@@ -118,7 +65,7 @@
 
                             <!-- Actual TextBox content with ScrollViewer -->
                             <ScrollViewer x:Name="PART_ContentHost"
-                                          Margin="10,15,10,0"
+                                          Margin="5"
                                           Background="Transparent"
                                           VerticalScrollBarVisibility="Auto"
                                           HorizontalScrollBarVisibility="Auto">
