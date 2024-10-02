@@ -65,9 +65,9 @@
 
 
 
-                                <TextBox MaxWidth="200" Text="{Binding CommandText}" Margin="0,5,0,5" Style="{StaticResource SmallModernTextbox}" />
-                                <TextBox MaxWidth="200" Text="{Binding TimeText}" Visibility="{Binding VTimeText}" Margin="0,5,0,5" Style="{StaticResource SmallModernTextbox}"/>
-                                <TextBox MaxWidth="200" Text="{Binding PromptText}" Visibility="{Binding VPromptText}" Margin="0,5,0,5" Style="{StaticResource SmallModernTextbox}"/>
+                                <TextBox MaxWidth="200" Text="{Binding CommandText}" Tag=" Command" Margin="0,5,0,5" Style="{StaticResource SmallModernTextbox}" />
+                                    <TextBox MaxWidth="200" Text="{Binding TimeText}" Tag=" Time" Visibility="{Binding VTimeText}" Margin="0,5,0,5" Style="{StaticResource SmallModernTextbox}"/>
+                                    <TextBox MaxWidth="200" Text="{Binding PromptText}" Tag=" Prompt" Visibility="{Binding VPromptText}" Margin="0,5,0,5" Style="{StaticResource SmallModernTextbox}"/>
                                 <CheckBox IsChecked="{Binding CalcCRC}" Margin="5" Style="{StaticResource CheckBoxTheme}" HorizontalAlignment="Left"/>
                                 <TextBlock Text="Place CRC" Foreground="#DFDFDF" Margin="37,-30,5,5" FontSize="16"/>
                                 <CheckBox IsChecked="{Binding IsSendingEnabled}" Margin="5" Style="{StaticResource CheckBoxTheme}" HorizontalAlignment="Left"/>

@@ -17,7 +17,9 @@
     <Authors>Kamikadzexa</Authors>
     <Company>Escort</Company>
     <PackageIcon>Escort Tool.ico</PackageIcon>
-    <AssemblyVersion>1.0.2</AssemblyVersion>
+    <AssemblyVersion>1.0.3</AssemblyVersion>
+    <Version>1.0.3</Version>
+    <FileVersion>1.0.3</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
